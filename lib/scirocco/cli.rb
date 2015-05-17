@@ -1,4 +1,4 @@
-strequire 'thor'
+require 'thor'
 require 'pp'
 
 module Scirocco
@@ -20,14 +20,28 @@ module Scirocco
       pp client.tests(project_id)
     end
 
-    desc "run_test <TEST_ID> <DEVICE_ID>", "Runs the test on the device"
+    option :poll, :type => :boolean
+    desc "run_test <TEST_CLASS_ID> <DEVICE_ID>", "Runs the test on the device"
     def run_test(test_class_id, device_id)
       client = Scirocco::Client.new(options[:api_key], options)
-      pp client.run_test(test_class_id, device_id)
+      test_job = client.run_test(test_class_id, device_id)
+      puts "* test_job:"
+      pp test_job
+      if options[:poll]
+        test_status = client.poll_test_result(test_job["test_job_id"])
+        if test_status["status"] == "passed"
+          puts "**** PASSED ****"
+          pp test_status
+        elsif test_status["status"] == "failed"
+          puts "**** FAILED ****"
+          pp test_status
+          raise SciroccoTestError.new(test_status["result"])
+        end
+      end
     end
 
     desc "check_test <TEST_JOB_ID>", "Check the test result"
-    def check_test_result(test_class_id, device_id)
+    def check_test(test_job_id)
       client = Scirocco::Client.new(options[:api_key], options)
       pp client.check_test(test_job_id)
     end

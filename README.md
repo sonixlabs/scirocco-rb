@@ -18,11 +18,15 @@ Or install it yourself as:
 
     $ gem install scirocco
 
-## Usage
+## Running Tests
 
-TODO: Write usage instructions here
+    $ scirocco run_test $TEST_CLASS_ID $DEVICE_ID --api-key $API_KEY --poll
 
 ## Jenkins Integration
+
+In Jenkins create a new Execute Shell build step as pictured below.
+
+![Jenkins Integration](https://raw.github.com/sonixlabs/scirocco-rb/master/assets/jenkins.png)
 
 ## Development
 

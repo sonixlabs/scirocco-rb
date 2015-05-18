@@ -1,6 +1,10 @@
 # SciroccoCloud Client
 
-The official Ruby client for the SciroccoCloud API.
+The official Ruby client for the [SciroccoCloud](http://www.scirocco-cloud.com/) API.
+
+## Document
+
+[Scirocco Cloud API Docs](https://www.scirocco-cloud.com/swagger)
 
 ## Installation
 

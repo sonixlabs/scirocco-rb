@@ -24,7 +24,7 @@ module Scirocco
     desc "run_test <TEST_CLASS_ID> <DEVICE_ID>", "Runs the test on the device"
     def run_test(test_class_id, device_id)
       client = Scirocco::Client.new(options[:api_key], options)
-      test_job = client.run_test(test_class_id, device_id)
+      test_job = client.run_test(test_class_id, device_id)["test_job"]
       puts "* test_job:"
       pp test_job
       if options[:poll]
@@ -51,5 +51,18 @@ module Scirocco
       client = Scirocco::Client.new(options[:api_key], options)
       pp client.devices(project_id)
     end
+
+    desc "apps <PROJECT_ID>", "Print list of apps"
+    def apps(project_id)
+      client = Scirocco::Client.new(options[:api_key], options)
+      pp client.apps(project_id)
+    end
+
+    desc "upload_app <PROJECT_ID> <APP_PATH>", "Upload app"
+    def upload_app(project_id, app_path)
+      client = Scirocco::Client.new(options[:api_key], options)
+      pp client.upload_app(project_id, app_path)
+    end
+
   end
 end

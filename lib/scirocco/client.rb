@@ -21,7 +21,7 @@ module Scirocco
 
     def projects
       url = build_url("projects")
-      get(url)["projects"]
+      get(url)
     end
 
     ##############
@@ -40,7 +40,7 @@ module Scirocco
 
     def tests(project_id)
       url = build_url("tests")
-      get(url, {:project_id => project_id})["tests"]
+      get(url, {:project_id => project_id})
     end
 
     def run_test(test_class_id, device_id)
@@ -51,7 +51,7 @@ module Scirocco
         :device_id => device_id
       }
 
-      post(url, data)["test_job"]
+      post(url, data)
     end
 
     # Checks for when test completes
@@ -77,6 +77,26 @@ module Scirocco
       get(url, params)
     end
 
+    ############
+    ## App API
+    ############
+
+    def apps(project_id)
+      url = build_url("apps")
+      get(url, {:project_id => project_id})
+    end
+
+    def upload_app(project_id, app_path)
+      url = build_url("apps", "upload")
+      data = {
+        :multipart => true,
+        :api_key    => @api_key,
+        :project_id => project_id,
+        :file   => File.new(app_path)
+      }
+      post(url, data)
+    end
+
     private
 
     def build_url(type, resource=nil)
@@ -92,18 +112,18 @@ module Scirocco
       query_string_params = params.collect{ |p| "&#{p[0].to_s}=#{p[1].to_s}" }.join
       #p "#{url}?api_key=#{@api_key}#{query_string_params}"
 
-      #begin
+      begin
         response = RestClient::Request.execute(:method => :get, :url => "#{url}?api_key=#{@api_key}#{query_string_params}", :timeout => @request_timeout, :open_timeout => @open_timeout)
         @last_request[:response] = response
-        JSON.parse(response)
-      #rescue => err
-      #  pp err
-      #  if err.response
-      #    raise JSON.parse(err.response)["error"]
-      #  else
-      #    raise err
-      #  end
-      #end
+        return JSON.parse(response)
+      rescue => err
+        if err.response
+          pp JSON.parse(err.response)
+          raise err.message
+        else
+          raise err
+        end
+      end
     end
 
     def post(url, data, capture_request=true)
@@ -114,10 +134,18 @@ module Scirocco
         }
       end
 
-      result = RestClient::Request.execute(:method => :post, :url => url, :payload => data, :timeout => @request_timeout, :open_timeout => @open_timeout)
-      @last_request[:response] = result if capture_request
-
-      JSON.parse(result)
+      begin
+        result = RestClient::Request.execute(:method => :post, :url => url, :payload => data, :timeout => @request_timeout, :open_timeout => @open_timeout)
+        @last_request[:response] = result if capture_request
+        JSON.parse(result)
+      rescue => err
+        if err.response
+          pp JSON.parse(err.response)
+          raise err.message
+        else
+          raise err
+        end
+      end
     end
   end
 end

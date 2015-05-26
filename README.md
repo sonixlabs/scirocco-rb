@@ -22,16 +22,35 @@ Or install it yourself as:
 
     $ gem install scirocco
 
+## Upload app
+
+    $ scirocco upload_app $PROJECT_ID $APP_PATH --api-key $API_KEY
+
 ## Running Tests
 
     $ scirocco run_test $TEST_CLASS_ID $DEVICE_ID --api-key $API_KEY --poll
 
 ## Jenkins Integration
 
-In Jenkins create a new Execute Shell build step as pictured below.
+In Jenkins create a new Execute Shell build step as below.
 
-![Jenkins Integration](https://raw.github.com/sonixlabs/scirocco-rb/master/assets/jenkins.png)
+    # Configuration
+    API_KEY=XXXXXXXXX
+    PROJECT_ID=XXX
+    APP_PATH=./XXXX.apk
+    TEST_CLASS_ID=XXX
+    DEVICE_ID=XXXXXXXXX
 
+    # Upload apk
+    scirocco upload_app $PROJECT_ID $APP_PATH --api-key $API_KEY
+
+    # Run test-completion
+    scirocco run_test $TEST_CLASS_ID $DEVICE_ID --poll --api-key $API_KEY
+
+
+![Jenkins Integration](https://raw.githubusercontent.com/sonixlabs/scirocco-rb/master/jenkins.png)
+
+                       
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment. Run `bundle exec scirocco` to use the code located in this directory, ignoring other installed copies of this gem.

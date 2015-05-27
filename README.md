@@ -1,17 +1,19 @@
+# Notice
+
+Since the API has not been released yet, this client library will not work.
+
+APIはまだリリースされていないため、このクライアントライブラリは動作しません。APIは2015/6/1にリリース予定です。
+
 # SciroccoCloud Client
 
 The official Ruby client for the [SciroccoCloud](http://www.scirocco-cloud.com/) API.
-
-## Document
-
-[Scirocco Cloud API Docs](https://www.scirocco-cloud.com/swagger)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'scirocco'
+gem 'scirocco', '0.1.2'
 ```
 
 And then execute:
@@ -20,7 +22,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install scirocco
+    $ gem install scirocco -v 0.1.2
 
 ## Upload app
 

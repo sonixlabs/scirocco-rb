@@ -10,9 +10,7 @@ The official Ruby client for the [SciroccoCloud](http://www.scirocco-cloud.com/)
 
 Add this line to your application's Gemfile:
 
-```ruby
-gem 'scirocco', '0.1.3'
-```
+    gem 'scirocco', '0.1.4'
 
 And then execute:
 
@@ -20,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install scirocco -v 0.1.3
+    $ gem install scirocco -v 0.1.4
 
 ## Upload app
 

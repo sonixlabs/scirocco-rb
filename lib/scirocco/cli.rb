@@ -88,9 +88,9 @@ module Scirocco
       client = Scirocco::Client.new(options[:api_key], options)
       devices = client.devices(options[:project_id], options)["devices"]
       if devices.length > 0
-        p devices[0]["device_id"]
+        print devices[0]["device_id"]
       else
-        p ""
+        print ""
       end
     end
 

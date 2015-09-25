@@ -68,10 +68,6 @@ scirocco get_device_id --project-id=$PROJECT_ID --status=available --api-key=$AP
 scirocco run_test --test-class-id=$TEST_CLASS_ID --device-id=$DEVICE_ID --poll --api-key=$API_KEY
 ~~~
 
-Here's what that code looks like in Jenkins:
-
-![Jenkins Integration](https://raw.githubusercontent.com/sonixlabs/scirocco-rb/master/jenkins.png)
-
 * Save the task.
 * Execute the task and check for the console output.
 

@@ -28,9 +28,9 @@ module Scirocco
     ## Device API
     ##############
 
-    def devices(project_id)
+    def devices(project_id, params={})
       url = build_url("devices")
-      get(url, {:project_id => project_id})
+      get(url, {:project_id => project_id}.merge(params))
     end
 
 
@@ -57,7 +57,6 @@ module Scirocco
     # Checks for when test completes
     def poll_test_result(test_job_id)
       status = nil
-      runtime = 0
       while !['passed', 'failed'].include?(status)
         sleep(API_POLL_SEC)
         test_status = check_test(test_job_id)["test_status"]
@@ -76,6 +75,24 @@ module Scirocco
       params = { test_job_id: test_job_id }
       get(url, params)
     end
+
+    def abort_test(test_job_id)
+      url = build_url("tests", "abort")
+      data = {
+        :api_key => @api_key,
+        :test_job_id => test_job_id
+      }
+      post(url, data)
+    end
+
+    def abort_all
+      url = build_url("tests", "abort_all")
+      data = {
+        :api_key => @api_key,
+      }
+      post(url, data)
+    end
+
 
     ############
     ## App API
@@ -96,8 +113,6 @@ module Scirocco
       }
       post(url, data)
     end
-
-    private
 
     def build_url(type, resource=nil)
       @scheme + "://" + [@host + ":" + @port.to_s, "api", @version, type, resource].compact.join("/") + "/"

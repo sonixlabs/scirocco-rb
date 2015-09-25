@@ -14,17 +14,20 @@ module Scirocco
       pp client.projects()
     end
 
-    desc "tests <PROJECT_ID>", "Print list of tests associated with the given project_id"
-    def tests(project_id)
+    desc "tests", "Print list of tests associated with the given project_id"
+    option :project_id, :required => true
+    def tests
       client = Scirocco::Client.new(options[:api_key], options)
-      pp client.tests(project_id)
+      pp client.tests(options[:project_id])
     end
 
+    desc "run_test", "Runs the test on the device"
+    option :test_class_id, :required => true
+    option :device_id, :required => true
     option :poll, :type => :boolean
-    desc "run_test <TEST_CLASS_ID> <DEVICE_ID>", "Runs the test on the device"
-    def run_test(test_class_id, device_id)
+    def run_test
       client = Scirocco::Client.new(options[:api_key], options)
-      test_job = client.run_test(test_class_id, device_id)["test_job"]
+      test_job = client.run_test(options[:test_class_id], options[:device_id])["test_job"]
       puts "* test_job:"
       pp test_job
       if options[:poll]
@@ -40,28 +43,70 @@ module Scirocco
       end
     end
 
-    desc "check_test <TEST_JOB_ID>", "Check the test result"
-    def check_test(test_job_id)
+    desc "check_test", "Check the test result"
+    option :test_job_id, :required => true
+    def check_test
       client = Scirocco::Client.new(options[:api_key], options)
-      pp client.check_test(test_job_id)
+      pp client.check_test(options[:test_job_id])
     end
 
-    desc "devices <PROJECT_ID>", "Print list of devices"
-    def devices(project_id)
+    desc "abort_test", "Abort the booked test job"
+    option :test_job_id, :required => true
+    def abort_test
       client = Scirocco::Client.new(options[:api_key], options)
-      pp client.devices(project_id)
+      pp client.abort_test(options[:test_job_id])
     end
 
-    desc "apps <PROJECT_ID>", "Print list of apps"
-    def apps(project_id)
+    desc "abort_all", "Abort the all booked test jobs"
+    def abort_all
       client = Scirocco::Client.new(options[:api_key], options)
-      pp client.apps(project_id)
+      pp client.abort_all
     end
 
-    desc "upload_app <PROJECT_ID> <APP_PATH>", "Upload app"
-    def upload_app(project_id, app_path)
+    desc "devices", "Print list of devices"
+    option :project_id, :required => true
+    option :os
+    option :os_version
+    option :carrier
+    option :model
+    option :country
+    option :status
+    def devices
       client = Scirocco::Client.new(options[:api_key], options)
-      pp client.upload_app(project_id, app_path)
+      pp client.devices(options[:project_id], options)
+    end
+
+    desc "get_device_id", "Get device id"
+    option :project_id, :required => true
+    option :os
+    option :os_version
+    option :carrier
+    option :model
+    option :country
+    option :status
+    def get_device_id
+      client = Scirocco::Client.new(options[:api_key], options)
+      devices = client.devices(options[:project_id], options)["devices"]
+      if devices.length > 0
+        p devices[0]["device_id"]
+      else
+        p ""
+      end
+    end
+
+    desc "apps", "Print list of apps"
+    option :project_id, :required => true
+    def apps
+      client = Scirocco::Client.new(options[:api_key], options)
+      pp client.apps(options[:project_id])
+    end
+
+    desc "upload_app", "Upload app"
+    option :project_id, :required => true
+    option :app_path, :required => true
+    def upload_app
+      client = Scirocco::Client.new(options[:api_key], options)
+      pp client.upload_app(options[:project_id], options[:app_path])
     end
 
   end

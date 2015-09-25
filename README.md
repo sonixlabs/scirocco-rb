@@ -3,7 +3,7 @@
 The official Ruby client for the [SciroccoCloud](http://www.scirocco-cloud.com/) API.
 
 ## Document
- 
+
 [Scirocco Cloud API Docs](https://www.scirocco-cloud.com/swagger)
 
 ## Installation
@@ -11,7 +11,7 @@ The official Ruby client for the [SciroccoCloud](http://www.scirocco-cloud.com/)
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'scirocco', '0.1.2'
+gem 'scirocco', '0.1.3'
 ```
 
 And then execute:
@@ -20,15 +20,24 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install scirocco -v 0.1.2
+    $ gem install scirocco -v 0.1.3
 
 ## Upload app
 
-    $ scirocco upload_app $PROJECT_ID $APP_PATH --api-key $API_KEY
+    $ scirocco upload_app --project-id=$PROJECT_ID --app-path=$APP_PATH --api-key=$API_KEY
 
-## Running Tests
 
-    $ scirocco run_test $TEST_CLASS_ID $DEVICE_ID --api-key $API_KEY --poll
+## Search device
+
+    $ scirocco devices --project-id=$PROJECT_ID --status=available --api-key=$API_KEY
+
+## Running tests
+
+    $ scirocco run_test --test-class-id=$TEST_CLASS_ID --device-id=$DEVICE_ID --api-key=$API_KEY --poll
+
+## Abort the all booked test jobs
+
+    $ scirocco abort_all --api-key=$API_KEY --poll
 
 ## Jenkins Integration
 
@@ -41,13 +50,22 @@ API_KEY=XXXXX
 PROJECT_ID=XXX
 APP_PATH=./MainActivity.apk
 TEST_CLASS_ID=XXX
-DEVICE_ID=XXXXXXXXX
+
+# Set available device id
+DEVICE_ID=`scirocco get_device_id --project-id=$PROJECT_ID --status=available --api-key=$API_KEY`
+if [ -n "$DEVICE_ID" ]; then
+  # When available device is not found, set not available device id
+  DEVICE_ID=`scirocco get_device_id --project-id=$PROJECT_ID --api-key=$API_KEY`
+fi
 
 # Upload apk
-scirocco upload_app $PROJECT_ID $APP_PATH --api-key $API_KEY
+scirocco upload_app --project-id=$PROJECT_ID --app-path=$APP_PATH --api-key=$API_KEY
+
+# Get device_id
+scirocco get_device_id --project-id=$PROJECT_ID --status=available --api-key=$API_KEY
 
 # Do the test
-scirocco run_test $TEST_CLASS_ID $DEVICE_ID --poll --api-key $API_KEY
+scirocco run_test --test-class-id=$TEST_CLASS_ID --device-id=$DEVICE_ID --poll --api-key=$API_KEY
 ~~~
 
 Here's what that code looks like in Jenkins:
